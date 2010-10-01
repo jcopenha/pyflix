@@ -744,11 +744,10 @@ class NetflixCatalog():
     def index(self):
         requestUrl = '/catalog/titles/index'
 
+        # only returns in XML format?
         return self.client._getResource(
             requestUrl,
-            self.client.user.accessToken,
-            {},
-            True
+            xml=True,
         )
 
     def autocomplete(self, term,startIndex=None,maxResults=None):

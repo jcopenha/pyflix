@@ -66,13 +66,16 @@ class TestQuery(unittest.TestCase):
 			assert re.search('Foo',info)
 			
 		data = netflixClient.catalog.search_titles(MOVIE_TITLE)
-		assert isinstance(data[0].title,unicode)
+		assert isinstance(data[0].title,str)
 		
-		movie = netflixClient.catalog.index(data[0].id)
-		assert isinstance(movie['catalog_title']['title']['regular'],unicode)
+        # API reads that it returns "all titles in the catalog"
+        # meaing every movie that Netflix has?  Let's not call 
+        # this every time then
+#		movie = netflixClient.catalog.index()
+#		assert isinstance(movie['catalog_title']['title']['regular'],str)
 		
 		people = netflixClient.catalog.search_people('Flip Wilson',maxResults=1)
-		assert isinstance(people,dict)
+		assert isinstance(people[0],NetflixPerson)
 		
 	# DISC TESTS
 	def test_disc_functions(self):
@@ -88,7 +91,7 @@ class TestQuery(unittest.TestCase):
 		netflixClient = NetflixClient(APP_NAME, API_KEY, API_SECRET, CALLBACK)
 		netflixUser = NetflixUser(EXAMPLE_USER,netflixClient)
 		username = netflixUser.name
-		assert isinstance(username,unicode)
+		assert isinstance(username,str)
 		data = netflixClient.catalog.search_titles('Cocoon',1,2)
 		ratings = netflixUser.getRatings(data)
 		history = netflixUser.getRentalHistory('shipped',updatedMin=1219775019,maxResults=4)
