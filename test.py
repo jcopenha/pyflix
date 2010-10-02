@@ -82,10 +82,9 @@ class TestQuery(unittest.TestCase):
 		netflixClient = NetflixClient(APP_NAME, API_KEY, API_SECRET, CALLBACK)
 		titles = netflixClient.catalog.search_titles('Cocoon',1,2)
 		formats = titles[0].formats()
-		assert isinstance(formats,dict)
-#TODO : not implemented anymore?
-#		synopsis = disc.getInfo('synopsis')
-#		assert isinstance(synopsis,dict)
+		assert isinstance(formats,list)
+		synopsis = titles[0].synopsis
+		assert isinstance(synopsis,str)
 				
 	def test_user_functions(self):
 		netflixClient = NetflixClient(APP_NAME, API_KEY, API_SECRET, CALLBACK)
@@ -95,8 +94,10 @@ class TestQuery(unittest.TestCase):
 		data = netflixClient.catalog.search_titles('Cocoon',1,2)
 		ratings = netflixUser.getRatings(data)
 		history = netflixUser.getRentalHistory('shipped',updatedMin=1219775019,maxResults=4)
-		assert int(history['rental_history']['number_of_results']) <= 5
+		# 45 is how many times it had been rented when I wrote the test
+		assert int(history['rental_history']['number_of_results']) >= 45 
 		
+		# yeah, these fail with Unauthorized, imagine that
 		queue = NetflixUserQueue(netflixUser)
 		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60002013"] )
 		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60002013"], position=1 )

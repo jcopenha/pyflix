@@ -283,16 +283,12 @@ class NetflixUser(NetflixBase):
 
     ### I haven't cleaned up user stuff below this line. ###
 
-    def getRatings(self, discInfo=[], urls=[]):
+    # Should be working on a NetflixTitle object
+    def getRatings(self, titles=[]):
         accessToken=self.accessToken
 
         requestUrl = '/users/%s/ratings/title' % (accessToken.key)
-        if not urls:
-            if isinstance(discInfo,list):
-                for disc in discInfo:
-                    urls.append(disc['id'])
-            else:
-                urls.append(discInfo['id'])
+        urls = [ x.id for x in titles]
         parameters = { 'title_refs': ','.join(urls) }
         
         info = simplejson.loads( self.client._getResource(
@@ -659,6 +655,13 @@ class NetflixTitle(NetflixBase):
     def release_year(self):
         try:
             return self.info['release_year']
+        except KeyError:
+            return None
+
+    @property
+    def synopsis(self):
+        try:
+            return self.getInfo('synopsis')['synopsis']
         except KeyError:
             return None
 
