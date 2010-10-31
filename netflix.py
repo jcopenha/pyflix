@@ -93,14 +93,19 @@ class NetflixClient:
                                     token)
 
         if (self.verbose):
-            print "POSTING TO" + oauthRequest.to_url()
+            print "POSTING TO", oauthRequest.to_url()
 
         headers = {'Content-Type':'application/x-www-form-urlencoded',
                    'Accept-encoding':'gzip'}
 
         data = oauthRequest.to_postdata()
         req = urllib2.Request(oauthRequest.to_url(), data, headers)
-        response = urllib2.urlopen(req)
+        try: 
+          response = urllib2.urlopen(req)
+        except urllib2.HTTPError as e:
+          print e
+          print e.headers
+          raise e
         data = gzip.GzipFile(fileobj=StringIO.StringIO(response.read())).read()
         return data
 

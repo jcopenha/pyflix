@@ -32,21 +32,6 @@ EMPTY_USER = {
         }
 }
 
-APP_NAME   = 'Movie browser'
-API_KEY    = 'nbf4kr594esg4af25qexwtnu'
-API_SECRET = 'SSSeTdsPsM'
-CALLBACK   = 'http://www.synedra.org'
-
-EXAMPLE_USER = {
-        'request': {
-                'key': 'guzwtx7epxmbder6dx5n2t7a',
-                'secret': 'D8HrxmaQ7YRr'
-        },
-        'access': {
-                'key': 'T1i0pqrkyEfVCl3NVbrSCMvFg0fPup3TsQ7bAQjN35XZcmuS9WDK7oVOkZdE6iGg8HkhEp4VQn7sSB.kILNu2HiQ--',
-                'secret': 'efMFPEPZ35f6'
-        }
-}
 
 class TestQuery(unittest.TestCase):
 	def test_base(self):
@@ -99,9 +84,9 @@ class TestQuery(unittest.TestCase):
 		
 		# yeah, these fail with Unauthorized, imagine that
 		queue = NetflixUserQueue(netflixUser)
-		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60002013"] )
-		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60002013"], position=1 )
-		response = queue.removeTitle( id="60002013")
+		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60010242"] )
+		response = queue.addTitle( urls=["http://api.netflix.com/catalog/titles/movies/60020242"], position=1)
+		response = queue.removeTitle( id="60010242")
 
 		discAvailable = queue.getAvailable('disc')
 		instantAvailable =  queue.getAvailable('instant')
@@ -110,4 +95,10 @@ class TestQuery(unittest.TestCase):
 		
 
 if __name__ == '__main__':
+    EXAMPLE_USER = simplejson.load(open("user.json"))
+    appinfo = simplejson.load(open("app.json"))
+    APP_NAME   = appinfo["app_name"]
+    API_KEY    = appinfo["api_key"]
+    API_SECRET = appinfo["api_secret"]
+
     unittest.main() 
